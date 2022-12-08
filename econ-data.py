@@ -20,4 +20,4 @@ def get_econ_data(code, start, end):
     return response
 
 if __name__ == "__main__":
-    print(get_econ_data('UMCSENT', '2020-03-01', '2022-02-28'))
+    print(get_econ_data('UMCSENT', '2020-03-01', '2022-03-31'))
