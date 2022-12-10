@@ -50,14 +50,16 @@ def enter_stock_data_into_database(data, table_name):
     conn.commit()
 
 #uses the get_stock_data() and enter_into_database() functions to enter all data for given year in a table
-def get_yearly_data(symbol, year):
+def get_yearly_data(symbol, year, enter):
     table_name = f'{symbol}_{year}_stock'
-    # drop_table('all_data.db', table_name)
+    if enter:
+        drop_table('all_data.db', table_name)
     full_year_data = []
     for i in range(0, 251, 25):
         data = get_stock_data(symbol, year, offset=i)
         full_year_data.extend(data['data']['eod'])
-        # enter_stock_data_into_database(data, table_name)
+        if enter:
+            enter_stock_data_into_database(data, table_name)
     # print(full_year_data)
     return full_year_data
 
@@ -71,7 +73,7 @@ def get_all_data(symbol, year_start, year_end):
     cur.execute(f'CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, year TEXT, start REAL, end REAL, percent_change REAL)')
     cur.execute(f'DELETE FROM {table_name}')
     for year in range(year_start, year_end+1, 4):
-        year_data_list = get_yearly_data(symbol, year)
+        year_data_list = get_yearly_data(symbol, year, enter=False)
         percent_change = 100 * (year_data_list[-1]['close'] - year_data_list[0]['open']) / year_data_list[0]['open']
         cur.execute(f'INSERT INTO {table_name} (year, start, end, percent_change) VALUES (?, ?, ?, ?)', 
                     (str(year), year_data_list[0]['open'], year_data_list[-1]['close'], percent_change))
@@ -79,9 +81,9 @@ def get_all_data(symbol, year_start, year_end):
     conn.commit()
 
 if __name__ == "__main__":
-    # get_yearly_data('DJI', '2021')
-    # clear_table('all_data.db', 'DJI_composite_stock')
-    # drop_table('all_data.db', 'DJI_composite_stock')
+    for year in range(1993, 2022, 4):
+        get_yearly_data('DJI', str(year), enter=True)
+    
     get_all_data('DJI', 1993, 2021)
 
 
