@@ -63,16 +63,19 @@ def get_post_election_data(symbol, year_start, year_end):
     file_name = dir_path + '/' + "all_data.db"
     conn = sqlite3.connect(file_name)
     cur = conn.cursor()
-    cur.execute(f'CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, year TEXT, start REAL, end REAL)')
+    cur.execute(f'CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, year TEXT, start REAL, end REAL, change REAL, percent_change REAL)')
     cur.execute(f'DELETE FROM {table_name}')
 
     for year in range(year_start, year_end+1, 4):
         year_table_name = f'{symbol}_{str(year)}_stock'
         fetch = cur.execute(f'SELECT date, open, close FROM {year_table_name}')
         year_data_list = fetch.fetchall()
-        # percent_change = 100 * (year_data_list[-1]['close'] - year_data_list[0]['open']) / year_data_list[0]['open']
-        cur.execute(f'INSERT INTO {table_name} (year, start, end) VALUES (?, ?, ?)', 
-                    (str(year), year_data_list[0][1], year_data_list[-1][2]))
+        start = year_data_list[0][1]
+        end = year_data_list[-1][2]
+        change = end - start
+        percent_change = 100 * (end - start) / start
+        cur.execute(f'INSERT INTO {table_name} (year, start, end, change, percent_change) VALUES (?, ?, ?, ?, ?)', 
+                    (str(year), start, end, change, percent_change))
     cur.close()
     conn.commit()
 
@@ -85,6 +88,6 @@ def stock_data_main(get_yearly=True, drop_composite=False):
     get_post_election_data('DJI', 1993, 2021)
 
 if __name__ == "__main__":
-    stock_data_main(get_yearly=True, drop_composite=True)
+    stock_data_main(get_yearly=False, drop_composite=True)
 
 
