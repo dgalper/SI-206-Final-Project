@@ -17,8 +17,7 @@ def get_stock_data(symbol, year, offset):
         return
     response = result.json()
     if 'error' in response:
-        print('Error during the API request')
-        return
+        print('Error during the API request: ' + str(response['error']))
     # print(response)
     return response
 
@@ -50,40 +49,42 @@ def enter_stock_data_into_database(data, table_name):
     conn.commit()
 
 #uses the get_stock_data() and enter_into_database() functions to enter all data for given year in a table
-def get_yearly_data(symbol, year, enter):
+def get_yearly_data(symbol, year):
     table_name = f'{symbol}_{year}_stock'
-    if enter:
-        drop_table('all_data.db', table_name)
-    full_year_data = []
+    drop_table('all_data.db', table_name)
     for i in range(0, 251, 25):
         data = get_stock_data(symbol, year, offset=i)
-        full_year_data.extend(data['data']['eod'])
-        if enter:
-            enter_stock_data_into_database(data, table_name)
-    # print(full_year_data)
-    return full_year_data
+        enter_stock_data_into_database(data, table_name)
 
 #creates a table recording start and end prices for each year after an election from 1993 to 2021
-def get_all_data(symbol, year_start, year_end):
+def get_post_election_data(symbol, year_start, year_end):
     table_name = f'{symbol}_composite_stock'
     dir_path = os.path.dirname(os.path.realpath(__file__))
     file_name = dir_path + '/' + "all_data.db"
     conn = sqlite3.connect(file_name)
     cur = conn.cursor()
-    cur.execute(f'CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, year TEXT, start REAL, end REAL, percent_change REAL)')
+    cur.execute(f'CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, year TEXT, start REAL, end REAL)')
     cur.execute(f'DELETE FROM {table_name}')
+
     for year in range(year_start, year_end+1, 4):
-        year_data_list = get_yearly_data(symbol, year, enter=False)
-        percent_change = 100 * (year_data_list[-1]['close'] - year_data_list[0]['open']) / year_data_list[0]['open']
-        cur.execute(f'INSERT INTO {table_name} (year, start, end, percent_change) VALUES (?, ?, ?, ?)', 
-                    (str(year), year_data_list[0]['open'], year_data_list[-1]['close'], percent_change))
+        year_table_name = f'{symbol}_{str(year)}_stock'
+        fetch = cur.execute(f'SELECT date, open, close FROM {year_table_name}')
+        year_data_list = fetch.fetchall()
+        # percent_change = 100 * (year_data_list[-1]['close'] - year_data_list[0]['open']) / year_data_list[0]['open']
+        cur.execute(f'INSERT INTO {table_name} (year, start, end) VALUES (?, ?, ?)', 
+                    (str(year), year_data_list[0][1], year_data_list[-1][2]))
     cur.close()
     conn.commit()
 
-if __name__ == "__main__":
+def stock_data_main(get_yearly=True, drop_composite=False):
     for year in range(1993, 2022, 4):
-        get_yearly_data('DJI', str(year), enter=True)
+        get_yearly_data('DJI', str(year))
     
-    get_all_data('DJI', 1993, 2021)
+    if drop_composite:
+        drop_table('all_data.db', 'DJI_composite_stock')
+    get_post_election_data('DJI', 1993, 2021)
+
+if __name__ == "__main__":
+    stock_data_main(get_yearly=True, drop_composite=True)
 
 

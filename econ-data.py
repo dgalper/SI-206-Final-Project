@@ -15,8 +15,8 @@ def get_econ_data(code, start, end, limit):
         return
     response = result.json()
     if 'error_code' in response:
-        print('Error during API request')
-        return
+        print('Error during API request: ' + str(response['error_code']))
+    # print(response)
     return response
 
 def enter_econ_data_into_database(data, table_name):
@@ -41,18 +41,50 @@ def drop_table(data_base, table_name):
     cur.execute(f'DROP TABLE IF EXISTS {table_name}')
     conn.commit()
 
-def get_all_data(code, start_year, end_year):
+def get_monthly_data(code, start_year, end_year):
+    drop_table('all_data.db', f'{code}_econ')
     for y in range(start_year, end_year+1, 4):
-        data = get_econ_data(code, f'{y}-01-01', f'{y}-12-31', limit=12)
+        data = get_econ_data(code, f'{str(y)}-01-01', f'{str(y)}-12-31', limit=12)
         enter_econ_data_into_database(data,f'{code}_econ')
 
+def get_post_election_data(code, start_year, end_year):
+    table_name = f'{code}_composite_econ'
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    file_name = dir_path + '/' + "all_data.db"
+    conn = sqlite3.connect(file_name)
+    cur = conn.cursor()
+    cur.execute(f'CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, year TEXT, start REAL, end REAL)')
+    cur.execute(f'DELETE FROM {table_name}')
+
+    monthly_table_name = f'{code}_econ'
+    fetch = cur.execute(f'SELECT date, value FROM {monthly_table_name}')
+    year_data_list = fetch.fetchall()
+
+    start_i = 0
+    end_i = 11
+    for y in range(start_year, end_year+1, 4):
+        start = float(year_data_list[start_i][1])
+        end = float(year_data_list[end_i][1])
+        # percent_change = 100 * (end - start) / start
+        cur.execute(f'INSERT INTO {table_name} (year, start, end) VALUES (?,?,?)', 
+                        (str(y), start, end))
+        start_i += 12
+        end_i += 12
+    conn.commit()
+
+def econ_data_main(get_individual=True, drop_composite=False):
+    if get_individual:
+        get_monthly_data('UNRATE', 1949, 2021)
+        get_monthly_data('UMCSENT', 1981, 2021)
+        get_monthly_data('DFF', 1957, 2021)
+
+    if drop_composite:
+        drop_table('all_data.db', 'UNRATE_composite_econ')
+        drop_table('all_data.db', 'UMCSENT_composite_econ')
+        drop_table('all_data.db', 'DFF_composite_econ')
+    get_post_election_data('UNRATE', 1949, 2021)
+    get_post_election_data('UMCSENT', 1981, 2021)
+    get_post_election_data('DFF', 1957, 2021)
+
 if __name__ == "__main__":
-
-    clear_table('all_data.db', 'UNRATE')
-    get_all_data('UNRATE', 1949, 2021)
-
-    clear_table('all_data.db', 'UMCSENT')
-    get_all_data('UMCSENT', 1949, 2021)
-
-    clear_table('all_data.db', 'DFF')
-    get_all_data('DFF', 1949, 2021)
+    econ_data_main(get_individual=True, drop_composite=True)

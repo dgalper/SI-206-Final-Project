@@ -52,20 +52,6 @@ def drop_table(data_base, table_name):
     cur.execute(f'DROP TABLE IF EXISTS {table_name}')
     conn.commit()
         
-    
-
-    
-
-
-
-    
-
-
-        
-
-
-    
-
 if __name__ == "__main__":
     #print(get_winning_party("1904"))
     year_winner_list = compile_election_data("1904","2020")
