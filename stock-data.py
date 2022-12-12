@@ -82,10 +82,13 @@ def get_post_election_data(symbol, year_start, year_end):
 def stock_data_main(get_yearly=True, drop_composite=False):
     for year in range(1993, 2022, 4):
         get_yearly_data('DJI', str(year))
+        get_yearly_data('IXIC', str(year))
     
     if drop_composite:
         drop_table('all_data.db', 'DJI_composite_stock')
+        drop_table('all_data.db', 'IXIC_composite_stock')
     get_post_election_data('DJI', 1993, 2021)
+    get_post_election_data('IXIC', 1993, 2021)
 
 if __name__ == "__main__":
     stock_data_main(get_yearly=True, drop_composite=True)

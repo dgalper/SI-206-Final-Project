@@ -43,7 +43,7 @@ def drop_table(data_base, table_name):
 
 def get_monthly_data(code, start_year, end_year):
     drop_table('all_data.db', f'{code}_econ')
-    if (code == 'EXPGS'):
+    if (code == 'EXPGS' or code == 'FGEXPND'):
         l = 4
     else: 
         l = 12
@@ -65,7 +65,7 @@ def get_post_election_data(code, start_year, end_year):
     year_data_list = fetch.fetchall()
 
     start_i = 0
-    if (code == 'EXPGS'):
+    if (code == 'EXPGS' or code == 'FGEXPND'):
         end_i = 3
     else:
         end_i = 11
@@ -75,7 +75,7 @@ def get_post_election_data(code, start_year, end_year):
         # percent_change = 100 * (end - start) / start
         cur.execute(f'INSERT INTO {table_name} (year, start, end) VALUES (?,?,?)', 
                         (str(y), start, end))
-        if (code == 'EXPGS'):
+        if (code == 'EXPGS' or code == 'FGEXPND'):
             start_i += 4
             end_i += 4
         else:
@@ -88,6 +88,7 @@ def econ_data_main(get_individual=True, drop_composite=False):
         get_monthly_data('UNRATE', 1949, 2021)
         get_monthly_data('UMCSENT', 1981, 2021)
         get_monthly_data('EXPGS', 1957, 2021)
+        get_monthly_data('FGEXPND', 1957, 2021)
 
     if drop_composite:
         drop_table('all_data.db', 'UNRATE_composite_econ')
@@ -96,6 +97,7 @@ def econ_data_main(get_individual=True, drop_composite=False):
     get_post_election_data('UNRATE', 1949, 2021)
     get_post_election_data('UMCSENT', 1981, 2021)
     get_post_election_data('EXPGS', 1957, 2021)
+    get_post_election_data('FGEXPND', 1957, 2021)
 
 if __name__ == "__main__":
     econ_data_main(get_individual=True, drop_composite=True)

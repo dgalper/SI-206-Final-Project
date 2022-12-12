@@ -19,6 +19,8 @@ def average_returns(symbol):
     full_name = ''
     if (symbol == 'DJI'):
         full_name = 'Dow Jones Industrial Average'
+    elif (symbol == 'IXIC'):
+        full_name = 'Nasdaq Composite'
     fhand.write(f'Returns for {symbol} ({full_name}) in the year after Presidential Elections\n')
     fhand.write('---------------------------------------------------------------------------------------\n')
     
@@ -40,6 +42,8 @@ def stock_volatility(symbol):
     full_name = ''
     if (symbol == 'DJI'):
         full_name = 'Dow Jones Industrial Average'
+    elif (symbol == 'IXIC'):
+        full_name = 'Nasdaq Composite'
     fhand = open('calculations.text', 'a')
     fhand.write(f'Standard deviation of daily close prices for {symbol} ({full_name}) in the year after Presidential Elections\n')
     fhand.write('------------------------------------------------------------------------------------------------------------------------\n')
@@ -58,6 +62,8 @@ def stock_volatility(symbol):
 def stock_data_calculations():
     average_returns('DJI')
     stock_volatility('DJI')
+    average_returns('IXIC')
+    stock_volatility('IXIC')
 
 #econ data calculations
 def average_change(code):
@@ -78,23 +84,25 @@ def average_change(code):
         full_name = 'Consumer Sentiment'
     elif (code == 'EXPGS'):
         full_name = 'Exports of Goods and Services'
+    elif (code == 'FGEXPND'):
+        full_name = 'Federal Government Expenditures'
     fhand.write(f'Change in {full_name} in the year after Presidential Elections\n')
     fhand.write('--------------------------------------------------------------------\n')
 
     total = 0
     for i in range(len(data)):
-        if (code == 'EXPGS'):
-            change = round((data[i][2] - data[i][1]) / data[i][1], 2)
+        if (code == 'EXPGS' or code == 'FGEXPND'):
+            change = round(100 * (data[i][2] - data[i][1]) / data[i][1], 2)
         else:
             change = round(data[i][2] - data[i][1], 2)
         total += change
         year = data[i][0]
         fhand.write(f'{year}: {change}')
-        if (code == 'UNRATE' or code=='EXPGS'):
+        if (code == 'UNRATE' or code=='EXPGS' or code == 'FGEXPND'):
             fhand.write('%')
         fhand.write('\n')
     fhand.write(f'Average: {round(total/len(data), 2)}')
-    if (code == 'UNRATE' or code == 'EXPGS'):
+    if (code == 'UNRATE' or code == 'EXPGS' or code == 'FGEXPND'):
         fhand.write('%')
     fhand.write('\n\n')
     fhand.close()
@@ -103,6 +111,7 @@ def econ_data_calculations():
     average_change('UNRATE')
     average_change('UMCSENT')
     average_change('EXPGS')
+    average_change('FGEXPND')
 
 #Elections results calculations
 def elections_calculations():
