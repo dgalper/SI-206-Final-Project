@@ -63,7 +63,7 @@ def get_post_election_data(symbol, year_start, year_end):
     file_name = dir_path + '/' + "all_data.db"
     conn = sqlite3.connect(file_name)
     cur = conn.cursor()
-    cur.execute(f'CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, year TEXT, start REAL, end REAL)')
+    cur.execute(f'CREATE TABLE IF NOT EXISTS {table_name} (id INTEGER PRIMARY KEY, year INTEGER, start REAL, end REAL)')
     cur.execute(f'DELETE FROM {table_name}')
 
     for year in range(year_start, year_end+1, 4):
@@ -75,7 +75,7 @@ def get_post_election_data(symbol, year_start, year_end):
         change = end - start
         percent_change = 100 * (end - start) / start
         cur.execute(f'INSERT INTO {table_name} (year, start, end) VALUES (?, ?, ?)', 
-                    (str(year), start, end))
+                    (year, start, end))
     cur.close()
     conn.commit()
 
