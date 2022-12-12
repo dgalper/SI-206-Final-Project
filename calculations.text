@@ -1,5 +1,17 @@
-Returns for DJI in the year after Presidential Elections
---------------------------------------------------------
+ELECTIONS CALCULATIONS
+**********************
+
+Past 30 Presidential Election Results
+-------------------------------------
+Republican Winners: 15
+Democrat Winners: 15
+
+
+STOCK DATA CALCULATIONS
+***********************
+
+Returns for DJI (Dow Jones Industrial Average) in the year after Presidential Elections
+---------------------------------------------------------------------------------------
 1993: 13.33%
 1997: 22.39%
 2001: -7.13%
@@ -10,8 +22,77 @@ Returns for DJI in the year after Presidential Elections
 2021: 18.65%
 Average: 14.55%
 
-Past 30 Presidential Election Results
--------------------------------------
-Republican Winners: 15
-Democrat Winners: 15
+Standard deviation of daily close prices for DJI (Dow Jones Industrial Average) in the year after Presidential Elections
+------------------------------------------------------------------------------------------------------------------------
+1993: 130.74
+1997: 524.85
+2001: 633.38
+2005: 196.72
+2009: 1012.07
+2013: 714.29
+2017: 1319.37
+2021: 1614.08
+
+
+ECONOMIC DATA CALCULATIONS
+**************************
+
+Change in Unemployment Rate in the year after Presidential Elections
+--------------------------------------------------------------------
+1949: 2.3%
+1953: 1.6%
+1957: 1.0%
+1961: -0.6%
+1965: -0.9%
+1969: 0.1%
+1973: 0.0%
+1977: -1.1%
+1981: 1.0%
+1985: -0.3%
+1989: 0.0%
+1993: -0.8%
+1997: -0.6%
+2001: 1.5%
+2005: -0.4%
+2009: 2.1%
+2013: -1.3%
+2017: -0.6%
+2021: -2.5%
+Average: 0.03%
+
+Change in Consumer Sentiment in the year after Presidential Elections
+--------------------------------------------------------------------
+1981: -7.1
+1985: -2.1
+1989: -7.4
+1993: -1.1
+1997: 4.7
+2001: -5.9
+2005: -4.0
+2009: 11.3
+2013: 8.7
+2017: -2.6
+2021: -8.4
+Average: -1.26
+
+Change in Exports of Goods and Services in the year after Presidential Elections
+--------------------------------------------------------------------
+1957: -0.08%
+1961: 0.03%
+1965: 0.2%
+1969: 0.28%
+1973: 0.28%
+1977: 0.02%
+1981: -0.0%
+1985: -0.0%
+1989: 0.06%
+1993: 0.04%
+1997: 0.05%
+2001: -0.13%
+2005: 0.07%
+2009: 0.13%
+2013: 0.04%
+2017: 0.06%
+2021: 0.15%
+Average: 0.07%
 
