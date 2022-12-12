@@ -10,6 +10,7 @@ import stock_data
 import econ_data
 import election_data
 import calculations as calc
+import visualizations as vis
 
 def clear_database():
     dir_path = os.path.dirname(os.path.realpath(__file__))
