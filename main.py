@@ -34,7 +34,7 @@ def clear_database():
     # clear calculations file
     open("calculations.text", "w").close()
 
-def main(start_fresh = False):
+def main(start_fresh=False):
     if start_fresh:
         clear_database()
         election_data.elections_main()
