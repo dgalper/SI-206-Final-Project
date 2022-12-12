@@ -50,6 +50,7 @@ def average_returns(symbol):
     fhand.write('---------------------------------------------------------------------------------------\n')
     
     total = 0
+    
     for i in range(len(data)):
         returns = round(100 * (data[i][2] - data[i][1]) / data[i][1], 2)
         total += returns
