@@ -49,5 +49,5 @@ def main(start_fresh=False):
     vis.vis_main()
 
 if __name__ == "__main__":
-    main(start_fresh=True)
+    main(start_fresh=False)
     

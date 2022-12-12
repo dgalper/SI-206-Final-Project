@@ -100,5 +100,5 @@ def vis_main():
     econ_data_graphs('EXPGS')
     econ_data_graphs('FGEXPND')
 
-if __name__ == "__main__":
-    vis_main()
+# if __name__ == "__main__":
+#     vis_main()
