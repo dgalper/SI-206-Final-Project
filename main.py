@@ -41,12 +41,12 @@ def main(start_fresh=False):
         election_data.elections_main()
         stock_data.stock_data_main()
         econ_data.econ_data_main()
-        calc.run_calculations()
     else:
         election_data.elections_main()
         stock_data.stock_data_main(False, True)
         econ_data.econ_data_main(False, True)
-        calc.run_calculations()
+    calc.run_calculations()
+    vis.vis_main()
 
 if __name__ == "__main__":
     main(start_fresh=True)
