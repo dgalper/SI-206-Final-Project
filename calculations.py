@@ -1,8 +1,11 @@
 import sqlite3
 import json
 import os
-import csv
 import numpy as np
+
+import stock_data
+import econ_data
+import election_data
 
 #Elections results calculations
 def elections_calculations():
@@ -300,5 +303,5 @@ def run_calculations():
     fhand.close()
     econ_data_calculations()
 
-if __name__ == "__main__":
-    run_calculations()
+# if __name__ == "__main__":
+#     run_calculations()

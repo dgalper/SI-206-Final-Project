@@ -61,8 +61,8 @@ def elections_main():
     enter_into_database("all_data.db", "Election" ,year_winner_list, 0, 24)
     enter_into_database("all_data.db", "Election" ,year_winner_list, 25, last_index)
 
-if __name__ == "__main__":
-    elections_main()
+# if __name__ == "__main__":
+#     elections_main()
     
 
 

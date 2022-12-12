@@ -118,5 +118,5 @@ def econ_data_main(get_individual=True, drop_composite=False):
     get_post_election_data('EXPGS', 1949, 2021)
     get_post_election_data('FGEXPND', 1949, 2021)
 
-if __name__ == "__main__":
-    econ_data_main(get_individual=True, drop_composite=True)
+# if __name__ == "__main__":
+#     econ_data_main(get_individual=True, drop_composite=True)

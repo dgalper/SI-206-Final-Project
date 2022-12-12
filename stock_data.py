@@ -90,7 +90,7 @@ def stock_data_main(get_yearly=True, drop_composite=False):
     get_post_election_data('DJI', 1993, 2021)
     get_post_election_data('IXIC', 1993, 2021)
 
-if __name__ == "__main__":
-    stock_data_main(get_yearly=True, drop_composite=True)
+# if __name__ == "__main__":
+#     stock_data_main(get_yearly=True, drop_composite=True)
 
 
